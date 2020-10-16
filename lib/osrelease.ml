@@ -282,18 +282,23 @@ module Version = struct
     Bos.OS.Cmd.(run_out cmd |> to_string) >>| function
     | "" -> None
     | v -> Some v
-  
-  let detect_win_version () = 
-     let info = Cmd.(v "systeminfo") in 
-     Bos.OS.Cmd.(run_out info |> to_string) >>| function
-     | "" -> None
-     | v -> 
-       let module S = String.Sub in 
-       let lines = String.cuts ~sep:"\r\n" v |> List.map S.v in 
-       let find = S.(is_prefix ~affix:(v "OS Version:")) in 
-       lines |> List.filter find |> List.hd |> fun s -> Some (S.to_string (S.trim s))       
-    
 
+let detect_win_version () =
+  let hd_opt = function [] -> None | x :: _ -> Some x in
+  let info = Cmd.(v "systeminfo") in
+  Bos.OS.Cmd.(run_out info |> to_string) >>| function
+    | "" -> None
+    | v -> (
+      let module S = String.Sub in
+      let lines = String.cuts ~sep:"\r\n" v |> List.map S.v in
+      let find = S.(is_prefix ~affix:(v "OS Version:")) in
+        lines |> List.filter find |> hd_opt |> function
+        | None -> None
+        | Some s ->
+          String.cuts ~sep:" " (S.to_string s)
+            |> List.filter (fun s -> s <> "")
+            |> fun lst -> List.nth_opt lst 2 )
+  
   let v () =
     match OS.v () with
     | `Linux -> detect_linux_version ()
