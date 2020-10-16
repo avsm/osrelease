@@ -35,74 +35,6 @@ jobs:
       working-directory: /home/opam/package
     - run: opam exec -- dune build @install @runtest && rm -rf _build
       working-directory: /home/opam/package
-  debian-10-4_10:
-    runs-on: ubuntu-latest
-    container:
-      image: ocurrent/opam@sha256:d93447965dffd745351c023839441769a9be5c77625b5c322398ca9f1dfb2638
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-      DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
-        bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.10.1 ocaml-base-compiler.4.10.1 ocaml-compiler-libs.v0.12.3
-        ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
-        parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
-        rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
-        topkg.1.0.3
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - run: opam pin add -yn osrelease.dev "./"
-      working-directory: /home/opam/package
-    - run: opam depext --update -y osrelease.dev $DEPS
-      working-directory: /home/opam/package
-    - run: opam install $DEPS
-      working-directory: /home/opam/package
-    - run: opam exec -- dune build @install @runtest && rm -rf _build
-      working-directory: /home/opam/package
-  debian-10-4_09:
-    runs-on: ubuntu-latest
-    container:
-      image: ocurrent/opam@sha256:1ff2b362ab97086663c30b6cb1c4af154c2092c92f340525bff391dce402125f
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-      DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
-        bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.09.1 ocaml-base-compiler.4.09.1 ocaml-compiler-libs.v0.12.3
-        ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
-        parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
-        rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
-        topkg.1.0.3
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - run: opam pin add -yn osrelease.dev "./"
-      working-directory: /home/opam/package
-    - run: opam depext --update -y osrelease.dev $DEPS
-      working-directory: /home/opam/package
-    - run: opam install $DEPS
-      working-directory: /home/opam/package
-    - run: opam exec -- dune build @install @runtest && rm -rf _build
-      working-directory: /home/opam/package
   alpine-3_12-4_11:
     runs-on: ubuntu-latest
     container:
@@ -115,74 +47,6 @@ jobs:
       DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
         bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
         fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.11.1 ocaml-base-compiler.4.11.1 ocaml-compiler-libs.v0.12.3
-        ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
-        parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
-        rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
-        topkg.1.0.3
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - run: opam pin add -yn osrelease.dev "./"
-      working-directory: /home/opam/package
-    - run: opam depext --update -y osrelease.dev $DEPS
-      working-directory: /home/opam/package
-    - run: opam install $DEPS
-      working-directory: /home/opam/package
-    - run: opam exec -- dune build @install @runtest && rm -rf _build
-      working-directory: /home/opam/package
-  alpine-3_12-4_10:
-    runs-on: ubuntu-latest
-    container:
-      image: ocurrent/opam@sha256:4a7fe8cfbb155725c52da4f1d815001bd89ffd8e483b8c2c321396adc82f673d
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-      DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
-        bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.10.1 ocaml-base-compiler.4.10.1 ocaml-compiler-libs.v0.12.3
-        ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
-        parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
-        rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
-        topkg.1.0.3
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - run: opam pin add -yn osrelease.dev "./"
-      working-directory: /home/opam/package
-    - run: opam depext --update -y osrelease.dev $DEPS
-      working-directory: /home/opam/package
-    - run: opam install $DEPS
-      working-directory: /home/opam/package
-    - run: opam exec -- dune build @install @runtest && rm -rf _build
-      working-directory: /home/opam/package
-  alpine-3_12-4_09:
-    runs-on: ubuntu-latest
-    container:
-      image: ocurrent/opam@sha256:5de16806b699d1de265f018570784eced803d59286fb5d418d3af3f3b27b78f7
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-      DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
-        bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.09.1 ocaml-base-compiler.4.09.1 ocaml-compiler-libs.v0.12.3
         ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
         parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
         rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
@@ -239,74 +103,6 @@ jobs:
       working-directory: /home/opam/package
     - run: opam exec -- dune build @install @runtest && rm -rf _build
       working-directory: /home/opam/package
-  ubuntu-18_04-4_10:
-    runs-on: ubuntu-latest
-    container:
-      image: ocurrent/opam@sha256:1c48ed47c17b5fb4fbe7089777bb3dbeab6eb5c217f577d45b56ffac99ff71d5
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-      DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
-        bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.10.1 ocaml-base-compiler.4.10.1 ocaml-compiler-libs.v0.12.3
-        ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
-        parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
-        rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
-        topkg.1.0.3
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - run: opam pin add -yn osrelease.dev "./"
-      working-directory: /home/opam/package
-    - run: opam depext --update -y osrelease.dev $DEPS
-      working-directory: /home/opam/package
-    - run: opam install $DEPS
-      working-directory: /home/opam/package
-    - run: opam exec -- dune build @install @runtest && rm -rf _build
-      working-directory: /home/opam/package
-  ubuntu-18_04-4_09:
-    runs-on: ubuntu-latest
-    container:
-      image: ocurrent/opam@sha256:dd753a2049ddee6cfda48b996f2a2dbc23a38122f7f97bbda55237946b0c61ed
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-      DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
-        bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.09.1 ocaml-base-compiler.4.09.1 ocaml-compiler-libs.v0.12.3
-        ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
-        parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
-        rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
-        topkg.1.0.3
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - run: opam pin add -yn osrelease.dev "./"
-      working-directory: /home/opam/package
-    - run: opam depext --update -y osrelease.dev $DEPS
-      working-directory: /home/opam/package
-    - run: opam install $DEPS
-      working-directory: /home/opam/package
-    - run: opam exec -- dune build @install @runtest && rm -rf _build
-      working-directory: /home/opam/package
   opensuse-15_2-4_11:
     runs-on: ubuntu-latest
     container:
@@ -319,74 +115,6 @@ jobs:
       DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
         bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
         fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.11.1 ocaml-base-compiler.4.11.1 ocaml-compiler-libs.v0.12.3
-        ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
-        parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
-        rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
-        topkg.1.0.3
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - run: opam pin add -yn osrelease.dev "./"
-      working-directory: /home/opam/package
-    - run: opam depext --update -y osrelease.dev $DEPS
-      working-directory: /home/opam/package
-    - run: opam install $DEPS
-      working-directory: /home/opam/package
-    - run: opam exec -- dune build @install @runtest && rm -rf _build
-      working-directory: /home/opam/package
-  opensuse-15_2-4_10:
-    runs-on: ubuntu-latest
-    container:
-      image: ocurrent/opam@sha256:814993e06b269a118d8b16461e3c61049e46cc0e5a0a8f263e9ec1cbfd47e274
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-      DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
-        bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.10.1 ocaml-base-compiler.4.10.1 ocaml-compiler-libs.v0.12.3
-        ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
-        parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
-        rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
-        topkg.1.0.3
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - run: opam pin add -yn osrelease.dev "./"
-      working-directory: /home/opam/package
-    - run: opam depext --update -y osrelease.dev $DEPS
-      working-directory: /home/opam/package
-    - run: opam install $DEPS
-      working-directory: /home/opam/package
-    - run: opam exec -- dune build @install @runtest && rm -rf _build
-      working-directory: /home/opam/package
-  opensuse-15_2-4_09:
-    runs-on: ubuntu-latest
-    container:
-      image: ocurrent/opam@sha256:e1f02d20164eb6e141ddf32cdb3d4c4e9ac7e7c7da901d65e89a53625eb82e47
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-      DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
-        bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.09.1 ocaml-base-compiler.4.09.1 ocaml-compiler-libs.v0.12.3
         ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
         parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
         rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
@@ -443,10 +171,10 @@ jobs:
       working-directory: /home/opam/package
     - run: opam exec -- dune build @install @runtest && rm -rf _build
       working-directory: /home/opam/package
-  centos-8-4_10:
+  fedora-32-4_11:
     runs-on: ubuntu-latest
     container:
-      image: ocurrent/opam@sha256:001ee18889e98571701784ba45eaaeb0d6a7fbc4e0f05a26398b41874822e70f
+      image: ocurrent/opam@sha256:3b1583f27601ea7ed79d67d0452448e2cb8fac629ab3fae940bc1e1caa59871b
       env:
         HOME: /home/opam
       options: --user 1000
@@ -454,7 +182,7 @@ jobs:
       HOME: /home/opam
       DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
         bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.10.1 ocaml-base-compiler.4.10.1 ocaml-compiler-libs.v0.12.3
+        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.11.1 ocaml-base-compiler.4.11.1 ocaml-compiler-libs.v0.12.3
         ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
         parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
         rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
@@ -463,6 +191,7 @@ jobs:
       run:
         working-directory: /home/opam
     steps:
+    - run: sudo dnf install -y findutils
     - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
         || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
         && git log --no-decorate -n1 --oneline && opam update -u
@@ -477,10 +206,10 @@ jobs:
       working-directory: /home/opam/package
     - run: opam exec -- dune build @install @runtest && rm -rf _build
       working-directory: /home/opam/package
-  centos-8-4_09:
+  oraclelinux-7-4_11:
     runs-on: ubuntu-latest
     container:
-      image: ocurrent/opam@sha256:d7f88ee798ac4609bde20ffa64050de25a66c26e058ae3022d220ebc0ab935e6
+      image: ocurrent/opam@sha256:9019efb50b4accadbfe2ac4555a17a12e025541ca16b7dcf658ff8db03009caf
       env:
         HOME: /home/opam
       options: --user 1000
@@ -488,7 +217,7 @@ jobs:
       HOME: /home/opam
       DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
         bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.09.1 ocaml-base-compiler.4.09.1 ocaml-compiler-libs.v0.12.3
+        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.11.1 ocaml-base-compiler.4.11.1 ocaml-compiler-libs.v0.12.3
         ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
         parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
         rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
