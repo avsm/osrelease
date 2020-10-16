@@ -252,7 +252,11 @@ module Distro = struct
             identify_linux () >>= function
             | None -> Ok (`Linux (`Other ""))
             | Some v -> Ok (`Linux (`Other v)) ) )
-    | _ -> Error (`Msg "foo")
+    | `Win32 -> (
+       Sys.cygwin |> function 
+       | true -> Ok (`Windows `Cygwin) 
+       | false -> Ok (`Windows `None) )
+    | _ -> Error (`Msg "Unknown Distro")
 end
 
 module Version = struct
@@ -276,13 +280,25 @@ module Version = struct
     Bos.OS.Cmd.(run_out cmd |> to_string) >>| function
     | "" -> None
     | v -> Some v
+  
+  let detect_win_version () = 
+     let info = Cmd.(v "systeminfo") in 
+     Bos.OS.Cmd.(run_out info |> to_string) >>| function
+     | "" -> None
+     | v -> 
+       let module S = String.Sub in 
+       let lines = String.cuts ~sep:"\r\n" v |> List.map S.v in 
+       let find = S.(is_prefix ~affix:(v "OS Version:")) in 
+       lines |> List.filter find |> List.hd |> fun s -> Some (S.to_string (S.trim s))       
+    
 
   let v () =
     match OS.v () with
     | `Linux -> detect_linux_version ()
     | `MacOS -> detect_macos_version ()
     | `FreeBSD -> detect_freebsd_version ()
-    | `Win32 | `OpenBSD | `DragonFly | `Cygwin ->
+    | `Win32 -> detect_win_version ()
+    | `OpenBSD | `DragonFly | `Cygwin ->
         Error (`Msg "Version detection on this platform not yet supported")
     | `Unknown _ -> Ok None
 end
