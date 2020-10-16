@@ -199,9 +199,11 @@ module Distro = struct
              (fun acc line ->
                let open Scanf in
                try
-                 sscanf line "%s@= %s" (fun k v ->
+                 sscanf line "%s@=%s" (fun k v ->
                      try sscanf v "\"%s@\"" (fun s -> (k, s) :: acc)
-                     with Scan_failure _ | End_of_file -> acc)
+                     with Scan_failure _ | End_of_file -> (
+                        try sscanf v "%s" (fun s -> (k, s) :: acc) 
+                        with Scan_failure _ | End_of_file -> acc))
                with Scan_failure _ | End_of_file -> acc)
              [] (Fpath.v file))
 
