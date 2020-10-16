@@ -206,45 +206,11 @@ jobs:
       working-directory: /home/opam/package
     - run: opam exec -- dune build @install @runtest && rm -rf _build
       working-directory: /home/opam/package
-  oraclelinux-7-4_11:
-    runs-on: ubuntu-latest
-    container:
-      image: ocurrent/opam@sha256:9019efb50b4accadbfe2ac4555a17a12e025541ca16b7dcf658ff8db03009caf
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-      DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
-        bos.0.2.0 conf-m4.1 csexp.1.3.2 dune.2.7.1 dune-configurator.2.7.1 fmt.0.8.9
-        fpath.0.7.3 logs.0.7.0 num.1.3 ocaml.4.11.1 ocaml-base-compiler.4.11.1 ocaml-compiler-libs.v0.12.3
-        ocaml-config.1 ocaml-migrate-parsetree.2.0.0 ocamlbuild.0.14.0 ocamlfind.1.8.1
-        parsexp.v0.14.0 ppx_derivers.1.2.1 ppx_sexp_conv.v0.14.1 ppxlib.0.17.0 result.1.5
-        rresult.0.6.0 seq.base sexplib.v0.14.0 sexplib0.v0.14.0 stdlib-shims.0.1.0
-        topkg.1.0.3
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        || git fetch origin master) && git reset -q --hard ae1dd9a1f8aa445840d9c5e6a05b22cfa86b6e22
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - run: opam pin add -yn osrelease.dev "./"
-      working-directory: /home/opam/package
-    - run: opam depext --update -y osrelease.dev $DEPS
-      working-directory: /home/opam/package
-    - run: opam install $DEPS
-      working-directory: /home/opam/package
-    - run: opam exec -- dune build @install @runtest && rm -rf _build
-      working-directory: /home/opam/package
   winmac:
     strategy:
       matrix:
         operating-system: [windows-latest, macos-latest]
-        ocaml-version: [4.11.0]
+        ocaml-version: [4.11.0, 4.10.0, 4.09.1]
     runs-on: ${{ matrix.operating-system }}
     env:
       DEPS: astring.0.8.5 base.v0.14.0 base-bigarray.base base-threads.base base-unix.base
