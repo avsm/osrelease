@@ -1,3 +1,11 @@
-(test
- (name convert)
- (libraries osrelease opam-format))
+;(test
+; (name convert)
+; (libraries osrelease opam-format))
+
+(executable
+ (name printer)
+ (libraries osrelease))
+
+(rule 
+ (alias runtest)
+ (action (run %{exe:printer.exe})))

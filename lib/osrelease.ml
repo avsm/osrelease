@@ -199,9 +199,11 @@ module Distro = struct
              (fun acc line ->
                let open Scanf in
                try
-                 sscanf line "%s@= %s" (fun k v ->
+                 sscanf line "%s@=%s" (fun k v ->
                      try sscanf v "\"%s@\"" (fun s -> (k, s) :: acc)
-                     with Scan_failure _ | End_of_file -> acc)
+                     with Scan_failure _ | End_of_file -> (
+                        try sscanf v "%s" (fun s -> (k, s) :: acc) 
+                        with Scan_failure _ | End_of_file -> acc))
                with Scan_failure _ | End_of_file -> acc)
              [] (Fpath.v file))
 
@@ -252,7 +254,11 @@ module Distro = struct
             identify_linux () >>= function
             | None -> Ok (`Linux (`Other ""))
             | Some v -> Ok (`Linux (`Other v)) ) )
-    | _ -> Error (`Msg "foo")
+    | `Win32 -> (
+       Sys.cygwin |> function 
+       | true -> Ok (`Windows `Cygwin) 
+       | false -> Ok (`Windows `None) )
+    | _ -> Error (`Msg "Unknown Distro")
 end
 
 module Version = struct
@@ -277,12 +283,29 @@ module Version = struct
     | "" -> None
     | v -> Some v
 
+let detect_win_version () =
+  let hd_opt = function [] -> None | x :: _ -> Some x in
+  let info = Cmd.(v "systeminfo") in
+  Bos.OS.Cmd.(run_out info |> to_string) >>| function
+    | "" -> None
+    | v -> (
+      let module S = String.Sub in
+      let lines = String.cuts ~sep:"\r\n" v |> List.map S.v in
+      let find = S.(is_prefix ~affix:(v "OS Version:")) in
+        lines |> List.filter find |> hd_opt |> function
+        | None -> None
+        | Some s ->
+          String.cuts ~sep:" " (S.to_string s)
+            |> List.filter (fun s -> s <> "")
+            |> fun lst -> List.nth_opt lst 2 )
+  
   let v () =
     match OS.v () with
     | `Linux -> detect_linux_version ()
     | `MacOS -> detect_macos_version ()
     | `FreeBSD -> detect_freebsd_version ()
-    | `Win32 | `OpenBSD | `DragonFly | `Cygwin ->
+    | `Win32 -> detect_win_version ()
+    | `OpenBSD | `DragonFly | `Cygwin ->
         Error (`Msg "Version detection on this platform not yet supported")
     | `Unknown _ -> Ok None
 end
